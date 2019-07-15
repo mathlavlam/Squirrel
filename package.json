@@ -19,7 +19,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build --prod",
+		"build": "PUBLIC_URL=https://squirrel-app.netlify.com react-scripts build --prod",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},
