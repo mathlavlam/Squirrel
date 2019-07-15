@@ -1,14 +1,16 @@
 import React, { ReactNode } from 'react';
 import CalculatorResultTable from '../CalculatorResultTable/CalculatorResultTable';
+import LangSwitch from '../LangSwitch/LangSwitch';
 import { toCurrency, pluralize, generateRdmString } from '../helpers/tools';
 import { Moment } from 'moment';
 import './Calculator.scss';
+import { strings } from './CalculatorLocales';
 const moment = require('moment');
 
 export default class Calculator extends React.Component<any, CalculatorState> {
 	public state: CalculatorState = {
-		existing: 825,
-		contribution: 150,
+		existing: 0,
+		contribution: 100,
 		frequency: 'week',
 		growth: 6,
 		years: 35,
@@ -17,15 +19,23 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 	};
 
 	public render(): ReactNode {
+		const currentLanguage: string = strings.getLanguage();
+		const isEn: boolean = currentLanguage === 'en';
 		const { existing, contribution, growth, years, inflationRate, frequency } = this.state;
 		const results = this.calculateGrowth(this.state);
+		const yearsDynamicPlural: string = isEn ? pluralize(years, 'year', 'years') : pluralize(years, 'an', 'ans');
 
 		return (
 			<div className="Calculator">
 				<form className="Calculator__form">
+					<LangSwitch
+						className="Calculator__lang-switch"
+						onChange={ this.onLanguageChange.bind(this) }
+						localeStrings={ strings }/>
+
 					<div className="Calculator__input-container">
 						<label className="Calculator__input-label">
-							J'ai déjà accumulé : 
+							{ strings.existingLabel }
 						</label>
 
 						<input
@@ -40,7 +50,7 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 
 					<div className="Calculator__input-container">
 						<label className="Calculator__input-label">
-							Je prévois mettre de côté 
+							{ strings.contributionLabel }
 						</label>
 
 						<input
@@ -51,21 +61,21 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 							onFocus={ this.onInputFocus.bind(this) }
 							onChange={ this.onNumberInputChange('contribution') } />
 
-						<span className="Calculator__input-unit">$ à chaque</span>
+						<span className="Calculator__input-unit">{ strings.dollarsEach }</span>
 
 						<select
 							className="Calculator__select Calculator__select--frequency custom-select custom-select--inline"
 							value={ frequency }
 							onChange={ e => this.setState({frequency: e.currentTarget.value as CalculatorFrequencyType}) }>
-							<option value="week">semaine</option>
-							<option value="month">mois</option>
-							<option value="year">année</option>
+							<option value="week">{ strings.week }</option>
+							<option value="month">{ strings.month }</option>
+							<option value="year">{ strings.year }</option>
 						</select>
 					</div>
 
 					<div className="Calculator__input-container">
 						<label className="Calculator__input-label">
-							Je prévois un taux de croissance moyen d'environ : 
+							{ strings.growthLabel }
 						</label>
 
 						<input
@@ -76,12 +86,12 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 							onFocus={ this.onInputFocus.bind(this) }
 							onChange={ this.onNumberInputChange('growth') } />
 						
-						<span className="Calculator__input-unit">% par année</span>
+						<span className="Calculator__input-unit">{ strings.percentPerYear }</span>
 					</div>
 
 					<div className="Calculator__input-container">
 						<label className="Calculator__input-label">
-							J'aimerais savoir le montant que j'aurai accumulé dans :
+							{ strings.yearsLabel }
 						</label>
 
 						<input
@@ -94,12 +104,12 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 							onFocus={ this.onInputFocus.bind(this) }
 							onChange={ this.onNumberInputChange('years') } />
 
-						<span className="Calculator__input-unit">{ pluralize(years, 'an', 'ans') }</span>
+						<span className="Calculator__input-unit">{ yearsDynamicPlural }</span>
 					</div>
 
 					<div className="Calculator__input-container">
 						<label className="Calculator__input-label">
-							Je désire indexer mes contributions à un niveau de :
+							{ strings.inflationRateLabel }
 						</label>
 
 						<input
@@ -110,20 +120,26 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 							onFocus={ this.onInputFocus.bind(this) }
 							onChange={ this.onNumberInputChange('inflationRate') } />
 
-						<span className="Calculator__input-unit">% par année</span>
+						<span className="Calculator__input-unit">{ strings.percentPerYear }</span>
 					</div>
 				</form>
 
 				<div className="Calculator__results">
 					<div className="Calculator__result-title-container">
-						<p className="Calculator__result-pre-title">En { years } { pluralize(years, 'an', 'ans') }, vous aurez accumulé :</p>
-						<h2 className="Calculator__result-title">{ toCurrency(results.total) }</h2>
+						<p className="Calculator__result-pre-title">
+							{ strings.formatString(strings.resultPreTitle, {
+								years,
+								yearTerm: yearsDynamicPlural
+							}) }
+						</p>
+						<h2 className="Calculator__result-title">{ toCurrency(results.total, currentLanguage) }</h2>
 					</div>
 	
 					<CalculatorResultTable
 						className="Calculator__table"
 						frequency={frequency}
-						results={results.details} />
+						results={results.details}
+						currentLanguage={ currentLanguage } />
 				</div>
 			</div>
 		);
@@ -205,20 +221,26 @@ export default class Calculator extends React.Component<any, CalculatorState> {
 	private onInputFocus(e: React.FocusEvent<HTMLInputElement>): void {
 		e.target.select();
 	}
+
+	private onLanguageChange(lang: string): void {
+		this.setState({});
+	}
 	//#endregion
 
 	//#region Public static methods
 	public static getFrequencyLabel(frequency: CalculatorFrequencyType): string {
+		const isEn: boolean = strings.getLanguage() === 'en';
+
 		switch (frequency) {
 			case 'week':
-				return 'semaine';
+				return isEn ? 'week' : 'semaine';
 
 			case 'month':
-				return 'mois';
+				return isEn ? 'month' : 'mois';
 
 			case 'year':
 			default:
-				return 'année';
+				return isEn ? 'year' : 'année';
 		}
 	}
 	//#endregion

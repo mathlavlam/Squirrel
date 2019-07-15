@@ -1,28 +1,36 @@
 import React from 'react';
 import Calculator, { CalculatorYearDetails, CalculatorFrequencyType } from '../Calculator/Calculator';
 import { toCurrency } from '../helpers/tools';
+import { strings } from './CalculatorResultTableLocales';
 import './CalculatorResultTable.scss';
 
 export default class CalculatorResultTable extends React.Component<CalculatorResultTableProps> {
 	//#region Props & state
 	public props: CalculatorResultTableProps = {
 		frequency: 'week',
-		results: []
+		results: [],
+		currentLanguage: 'en'
 	};
 	//#endregion
 
+	public componentWillReceiveProps(nextProps: CalculatorResultTableProps): void {
+		strings.setLanguage(nextProps.currentLanguage);
+	}
+
 	//#region Render
 	public render(): JSX.Element {
+		const { currentLanguage } = this.props;
+
 		return (
 			<div className="CalculatorResultTable">
 				<table className="CalculatorResultTable__table">
 					<thead className="CalculatorResultTable__thead">
 						<tr className="CalculatorResultTable__tr">
-							<th className="CalculatorResultTable__th">Année</th>
+							<th className="CalculatorResultTable__th">{ strings.year }</th>
 							{ this.props.frequency !== 'year' ? (
-								<th className="CalculatorResultTable__th">Contribution par année</th>
+								<th className="CalculatorResultTable__th">{ strings.contribPerYear }</th>
 							) : null }
-							<th className="CalculatorResultTable__th">Contribution par { Calculator.getFrequencyLabel(this.props.frequency) }</th>
+							<th className="CalculatorResultTable__th">{ strings.formatString(strings.contribPer, { term: Calculator.getFrequencyLabel(this.props.frequency) }) }</th>
 							<th className="CalculatorResultTable__th">Total</th>
 						</tr>
 					</thead>
@@ -39,23 +47,23 @@ export default class CalculatorResultTable extends React.Component<CalculatorRes
 
 								{ this.props.frequency !== 'year' ? (
 									<td className="CalculatorResultTable__td">
-										{ toCurrency(result.contribution) }
+										{ toCurrency(result.contribution, currentLanguage) }
 									</td>
 								) : null }
 
 								<td className="CalculatorResultTable__td">
-									{ toCurrency(result.frequencyContribution) }
+									{ toCurrency(result.frequencyContribution, currentLanguage) }
 								</td>
 
 								<td className="CalculatorResultTable__td">
-									{ toCurrency(result.total) }
+									{ toCurrency(result.total, currentLanguage) }
 								</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
 
-				<em className="small small--faded">* Les contributions de l'année en cours sont comptées à partir d'aujourd'hui jusqu'à la fin de l'année. Il est donc normale que les contributions de l'année en cours soient plus basses que les autres années.</em>
+				<em className="small small--faded">{ strings.bottomNote }</em>
 			</div>
 		);
 	}
@@ -66,4 +74,5 @@ export interface CalculatorResultTableProps {
 	className?: string;
 	results: CalculatorYearDetails[];
 	frequency: CalculatorFrequencyType;
+	currentLanguage: string;
 }

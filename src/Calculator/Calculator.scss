@@ -12,7 +12,14 @@
 	text-align: left;
 
 	&__form {
+		position: relative;
 		padding: 24px 0 36px;
+	}
+
+	&__lang-switch {
+		position: absolute;
+		right: 0;
+		top: 0;
 	}
 
 	&__input-container {

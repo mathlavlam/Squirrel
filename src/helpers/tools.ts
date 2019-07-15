@@ -1,5 +1,5 @@
-export function toCurrency(x: number): string {
-	return x.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' });
+export function toCurrency(x: number, language: string = 'en'): string {
+	return x.toLocaleString(`${ language }-CA`, { style: 'currency', currency: 'CAD' });
 }
 
 export function pluralize(count: number, singular: string, plural: string): string {

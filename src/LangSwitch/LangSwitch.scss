@@ -1,0 +1,34 @@
+@import '../scss/variables';
+
+.LangSwitch {
+	&__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	&__item {
+		display: inline-block;
+
+		&--current {
+			.LangSwitch__item-btn {
+				font-weight: 700;
+			}
+		}
+
+		&:not(:last-child) {
+			margin-right: 8px;
+		}
+	}
+
+	&__item-btn {
+		appearance: none;
+		background: none;
+		border: none;
+		padding: 0;
+		outline: none;
+		cursor: pointer;
+		font: 400 14px/22px $f-primary;
+		text-transform: uppercase;
+	}
+}
