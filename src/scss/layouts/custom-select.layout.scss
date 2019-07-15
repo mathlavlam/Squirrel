@@ -1,0 +1,16 @@
+.custom-select {
+	appearance: none;
+	background: none;
+	border: none;
+	height: 24px;
+	font: 400 16px/24px $f-primary;
+	outline: none;
+	cursor: pointer;
+	border-bottom: 1px solid #CFCFCF;
+	border-radius: 0 !important;
+
+	&--inline {
+		display: inline-block;
+		margin: 0 4px;
+	}
+}

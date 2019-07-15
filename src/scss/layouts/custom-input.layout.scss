@@ -1,0 +1,14 @@
+.custom-input {
+	appearance: none;
+	border: none;
+	border-bottom: 1px solid #CFCFCF;
+	height: 24px;
+	font: 400 16px/24px $f-primary;
+
+	&--inline {
+		display: inline-block;
+		width: 40px;
+		outline: none;
+		margin: 0 4px;
+	}
+}

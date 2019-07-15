@@ -1,0 +1,55 @@
+@import '../scss/variables';
+
+.Calculator {
+	display: block;
+	padding: 24px;
+	width: calc(100% - 32px);
+	max-width: 700px;
+	background: #FFF;
+	border: 1px solid #E2E2E2;
+	border-radius: 8px;
+	box-shadow: 0 18px 10px -8px rgba(#000, 0.2);
+	text-align: left;
+
+	&__form {
+		padding: 24px 0 36px;
+	}
+
+	&__input-container {
+		&:not(:last-of-type) {
+			margin-bottom: 16px;
+		}
+	}
+
+	&__input, &__select {
+		font-weight: 700;
+	}
+
+	&__input {
+		&--existing {
+			width: 100px;
+		}
+
+		&--contribution {
+			width: 75px;
+		}
+	}
+
+	&__results {
+		padding-top: 24px;
+		border-top: 1px solid #e2e2e2;
+	}
+
+	&__result-title-container {
+		margin-bottom: 36px;
+		text-align: center;
+	}
+
+	&__result-pre-title {
+		font: 400 14px/1.2 $f-primary;
+	}
+
+	&__result-title {
+		font: 700 36px/1.4 $f-primary;
+	}
+}
