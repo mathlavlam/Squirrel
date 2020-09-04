@@ -11,7 +11,7 @@
 		"@types/react": "16.8.23",
 		"@types/react-dom": "16.8.4",
 		"moment": "^2.24.0",
-		"node-sass": "^4.12.0",
+		"node-sass": "^4.13.1",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
 		"react-localization": "^1.0.14",
